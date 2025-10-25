@@ -2,7 +2,7 @@ import Post from "../models/post.model.js";
 
 export const createPost = async (req, res) => {
   const { title, content } = req.body;
-  const authorId = req.user.fullName;
+  const authorName = req.user.fullName;
 
   try {
     if (!title || !content) {
@@ -16,7 +16,8 @@ export const createPost = async (req, res) => {
     const newPost = new Post({
       title,
       content,
-      author: authorId,
+      author: authorName,
+      authorId: req.user._id,
       photo: photoBase64
     });
 
@@ -130,7 +131,7 @@ export const getPostById = async (req, res) => {
 export const getPostsByUser =  async (req, res) => {
     try{
         const { userId } = req.params;
-        const post = await Post.find({author: userId});
+        const post = await Post.find({authorId: userId});
         
         
         if(!post){
